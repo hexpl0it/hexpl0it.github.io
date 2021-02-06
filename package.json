@@ -1,0 +1,24 @@
+{
+  "name": "hexpl0it.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hexpl0it/hexpl0it.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hexpl0it/hexpl0it.github.io/issues"
+  },
+  "homepage": "https://github.com/hexpl0it/hexpl0it.github.io#readme",
+  "dependencies": {
+    "local-echo": "github:wavesoft/local-echo",
+    "xterm": "^4.10.0",
+    "xterm-addon-web-links": "^0.4.0"
+  }
+}
