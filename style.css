@@ -5,8 +5,15 @@ html {
     min-height: 100%;
     margin: 0;
     display: flex;
-    background-color: #000000;
     align-items: center;
+  }
+
+  body.dark {
+    background-color: #000000;
+  }
+
+  body.light {
+    background-color: #FFFFFF;
   }
 
   .container {
@@ -49,11 +56,16 @@ html {
   }
   
   .fakeScreen {
-    background-color: #151515;
     box-sizing: border-box;
     width: 1024px;
     margin: 0 auto;
     padding: 20px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+  .fakeScreen.dark {
+    background-color: #151515;
+  }
+  .fakeScreen.light {
+    background-color: #d8d8d8;
   }

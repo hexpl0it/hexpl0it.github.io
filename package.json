@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/hexpl0it/hexpl0it.github.io#readme",
   "dependencies": {
+    "jquery": "^3.5.1",
     "local-echo": "github:wavesoft/local-echo",
     "xterm": "^4.10.0",
     "xterm-addon-fit": "^0.5.0",
