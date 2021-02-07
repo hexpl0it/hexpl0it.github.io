@@ -4,18 +4,18 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
     <script src="node_modules/xterm/lib/xterm.js"></script>
+    <script src="node_modules/xterm-addon-web-links/lib/xterm-addon-web-links.js"></script>
+    <script src="node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
   </head>
   <body>
-
-    <div class=fakeMenu>
+    <div class="container">
+      <div class="fakeMenu">
         <div class="fakeButtons fakeClose"></div>
         <div class="fakeButtons fakeMinimize"></div>
         <div class="fakeButtons fakeZoom"></div>
       </div>
-      <div id="terminal" class="fakeScreen">
-
-      </div>
-
+      <div id="terminal" class="fakeScreen"></div>
+    </div>
     <script>
       var startString = "\x1B[1;3;31mluca-bergantin: ~ $\x1B[0m ";
       var curr_line = "";
@@ -23,10 +23,13 @@
       var theme = { background: "#151515" };
 
       var term = new Terminal();
-
+      term.loadAddon(new WebLinksAddon.WebLinksAddon());
+      var fitAddon = new FitAddon.FitAddon();
+      term.loadAddon(fitAddon);
       term.setOption("theme", theme);
       term.setOption("cursorBlink", true);
       term.open(document.getElementById("terminal"));
+      fitAddon.fit();
       term.write(startString);
       term.onData((data) => {
         const code = data.charCodeAt(0);
@@ -52,10 +55,16 @@
 
       function parseCommand(command) {
         term.write("\r\n");
-        switch(command) {
-            case "help": printHelp(); break;
-            case "projects": listProjects(); break;
-            case "contacts": printContacts(); break;
+        switch (command) {
+          case "help":
+            printHelp();
+            break;
+          case "projects":
+            listProjects();
+            break;
+          case "contacts":
+            printContacts();
+            break;
         }
       }
 
@@ -66,16 +75,16 @@
       }
 
       function printContacts() {
-          term.write("eMail: luca.bergantin.04@gmail.com" + "\r\n");
-          term.write("Github: https://github.com/hexpl0it" + "\r\n");
+        term.write("eMail: mailto:luca.bergantin.04@gmail.com" + "\r\n");
+        term.write("Github: https://github.com/hexpl0it" + "\r\n");
       }
 
       function listProjects() {
-          term.write("FattEleToDanea" + "\r\n");
-          term.write("FattureInCloudUploader" + "\r\n");
-          term.write("Marino" + "\r\n");
-          term.write("LabelPrinter" + "\r\n");
-          term.write("EasyB&B" + "\r\n");
+        term.write("FattEleToDanea" + "\r\n");
+        term.write("FattureInCloudUploader" + "\r\n");
+        term.write("Marino" + "\r\n");
+        term.write("LabelPrinter" + "\r\n");
+        term.write("EasyB&B" + "\r\n");
       }
     </script>
   </body>

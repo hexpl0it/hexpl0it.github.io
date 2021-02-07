@@ -4,6 +4,13 @@ html {
   body {
     min-height: 100%;
     margin: 0;
+    display: flex;
+    background-color: #000000;
+    align-items: center;
+  }
+
+  .container {
+    margin: 0 auto;
   }
 
   .fakeButtons {
