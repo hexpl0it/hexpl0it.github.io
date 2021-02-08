@@ -9,7 +9,17 @@
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
   </head>
   <body>
-    <div class="container">
+    <div id="os-loader" class="container noshadow">
+      <div class="center dark">
+        <div class="ls-logo dark"></div>
+        <div class="progress-bar dark">
+          <span class="bar">
+            <span class="progress dark"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div id="os" style="display: none" class="container">
       <div class="fakeMenu">
         <div class="fakeButtons fakeClose"></div>
         <div class="fakeButtons fakeMinimize"></div>
@@ -18,42 +28,64 @@
       <div id="terminal" class="fakeScreen"></div>
     </div>
     <script>
+      var term = new Terminal();
+      const animated = document.querySelector(".progress");
+
+      animated.addEventListener("animationend", () => {
+        loadTerminal();
+        $("#os-loader").hide();
+        $("#os").show();
+        setTheme("light");
+      });
+
+      var firstAccess =
+        "Welcome in LB OS.\r\n\r\nUse 'help' to show a list of available commands.\r\n";
       var startString = "\x1B[1;3;31mluca-bergantin: ~ $\x1B[0m ";
       var curr_line = "";
 
-      var themeLight = { background: "#d8d8d8", foreground: "#000000", cursor:"#000000" };
-      var themeDark = { background: "#151515", foreground: "#d8d8d8", cursor:"#d8d8d8" };
+      var themeLight = {
+        background: "#d8d8d8",
+        foreground: "#000000",
+        cursor: "#000000",
+      };
+      var themeDark = {
+        background: "#151515",
+        foreground: "#d8d8d8",
+        cursor: "#d8d8d8",
+      };
 
-      var term = new Terminal();
-      term.loadAddon(new WebLinksAddon.WebLinksAddon());
-      var fitAddon = new FitAddon.FitAddon();
-      term.loadAddon(fitAddon);
-      term.setOption("theme", themeDark);
-      term.setOption("cursorBlink", true);
-      term.open(document.getElementById("terminal"));
-      fitAddon.fit();
-      term.write(startString);
-      term.onData((data) => {
-        const code = data.charCodeAt(0);
-        if (code == 13) {
-          // CR
-          parseCommand(curr_line);
-          term.write(startString);
-          curr_line = "";
-        } else if (code == 127) {
-          if (curr_line) {
-            curr_line = curr_line.slice(0, curr_line.length - 1);
-            term.write("\b \b");
+      function loadTerminal() {
+        term.loadAddon(new WebLinksAddon.WebLinksAddon());
+        var fitAddon = new FitAddon.FitAddon();
+        term.loadAddon(fitAddon);
+        term.setOption("theme", themeDark);
+        term.setOption("cursorBlink", true);
+        term.open(document.getElementById("terminal"));
+        fitAddon.fit();
+        term.write(firstAccess);
+        term.write(startString);
+        term.onData((data) => {
+          const code = data.charCodeAt(0);
+          if (code == 13) {
+            // CR
+            parseCommand(curr_line);
+            term.write(startString);
+            curr_line = "";
+          } else if (code == 127) {
+            if (curr_line) {
+              curr_line = curr_line.slice(0, curr_line.length - 1);
+              term.write("\b \b");
+            }
+            return;
+          } else if (code < 32) {
+            return;
+          } else {
+            // Visible
+            term.write(data);
+            curr_line += data;
           }
-          return;
-        } else if (code < 32) {
-          return;
-        } else {
-          // Visible
-          term.write(data);
-          curr_line += data;
-        }
-      });
+        });
+      }
 
       function parseCommand(command) {
         term.write("\r\n");
@@ -94,21 +126,20 @@
         term.write("theme {light|dark}" + "\r\n");
       }
 
-      function setTheme(style)
-      {
+      function setTheme(style) {
         $(document.body).removeClass("dark");
         $(document.body).removeClass("light");
         $(document.body).addClass(style);
 
-        $('.fakeMenu').removeClass("dark");
-        $('.fakeMenu').removeClass("light");
-        $('.fakeMenu').addClass(style);
+        $(".fakeMenu").removeClass("dark");
+        $(".fakeMenu").removeClass("light");
+        $(".fakeMenu").addClass(style);
 
-        $('.fakeScreen').removeClass("dark");
-        $('.fakeScreen').removeClass("light");
-        $('.fakeScreen').addClass(style);
+        $(".fakeScreen").removeClass("dark");
+        $(".fakeScreen").removeClass("light");
+        $(".fakeScreen").addClass(style);
 
-        if(style == "dark") {
+        if (style == "dark") {
           term.setOption("theme", themeDark);
         } else {
           term.setOption("theme", themeLight);
@@ -127,8 +158,6 @@
         term.write("LabelPrinter" + "\r\n");
         term.write("EasyB&B" + "\r\n");
       }
-
-      setTheme("light");
     </script>
   </body>
 </html>
